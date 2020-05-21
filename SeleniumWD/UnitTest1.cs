@@ -3,19 +3,27 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using System;
+using System.Reflection.Metadata;
 using System.Threading;
 
 namespace SeleniumWD
 {
     public class Tests
     {
-        public static IWebDriver driver;
+        private static IWebDriver driver;
+        private string baseURL;
+        private LoginPage loginPage;
+        private MainPage mainPage;
+        private AllProducts allProducts;
+        private ProductEditingPage productEditingPage;
+        private ProductInfoPage productInfoPage;
 
         [SetUp]
         public void Setup()
         {
             driver = new ChromeDriver();
-            driver.Navigate().GoToUrl("http://localhost:5000");
+            baseURL = "http://localhost:5000";
+            driver.Navigate().GoToUrl(baseURL);
             driver.Manage().Window.Maximize();
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
         }
@@ -23,87 +31,87 @@ namespace SeleniumWD
         [Test]
         public void Login_test()
         {
-            driver.FindElement(By.XPath("//input[ @name =\"Name\"]")).SendKeys("user");
-            driver.FindElement(By.XPath("//input[ @name =\"Password\"]")).SendKeys("user");
-            driver.FindElement(By.CssSelector(".btn")).Click();
-            Assert.AreEqual("Home page", driver.FindElement(By.XPath("//h2")).Text);
+            loginPage = new LoginPage(driver);
+            mainPage = new MainPage(driver);
+            loginPage.Login("user","user");
+            Assert.AreEqual("Home page",mainPage.GetHomePageTitle());
         }
 
         [Test]
         public void AddProduct_Test()
         {
-            driver.FindElement(By.XPath("//input[ @name =\"Name\"]")).SendKeys("user");
-            driver.FindElement(By.XPath("//input[ @name =\"Password\"]")).SendKeys("user");
-            driver.FindElement(By.CssSelector(".btn")).Click();
-            driver.FindElement(By.XPath("//ul//a[@href=\"/Product\"]")).Click();
-            driver.FindElement(By.CssSelector(".btn")).Click();
-            driver.FindElement(By.CssSelector("#ProductName")).SendKeys("Sweets");
-            SelectElement select1 = new SelectElement(driver.FindElement(By.CssSelector("#CategoryId")));
-            select1.SelectByText("Condiments");
-            SelectElement select2 = new SelectElement(driver.FindElement(By.CssSelector("#SupplierId")));
-            select2.SelectByText("Norske Meierier");
-            driver.FindElement(By.CssSelector("#UnitPrice")).SendKeys("90");
-            driver.FindElement(By.CssSelector("#QuantityPerUnit")).SendKeys("3");
-            driver.FindElement(By.CssSelector("#UnitsInStock")).SendKeys("120");
-            driver.FindElement(By.CssSelector("#UnitsOnOrder")).SendKeys("40");
-            driver.FindElement(By.CssSelector("#ReorderLevel")).SendKeys("5");
-            driver.FindElement(By.CssSelector(".btn")).Click();
-            Assert.AreEqual(isElementPresent(By.XPath("//div[h2=\"Product editing\"]")),false);
+            loginPage = new LoginPage(driver);
+            mainPage = new MainPage(driver);
+            allProducts = new AllProducts(driver);
+            productEditingPage = new ProductEditingPage(driver);
+            loginPage.Login("user", "user");
+            mainPage.OpenProducts();
+            allProducts.OpenProductCreator();
+            productEditingPage.SetProductName("Sweets");
+            productEditingPage.SetCategory ("Condiments");
+            productEditingPage.SetSupplier("Norske Meierier");
+            productEditingPage.SetUnitPrice("90");
+            productEditingPage.SetQuantityPerUnit("3");
+            productEditingPage.SetUnitsInStock("120");
+            productEditingPage.SetUnitsOnOrder("40");
+            productEditingPage.SetReorderLevel("5");
+            productEditingPage.CreateConfirmation();
+            Assert.AreNotEqual(allProducts.GetAllProductsTitle(),"Product editing");
         }
 
         [Test]
         public void Check_Test()
         {
-            driver.FindElement(By.XPath("//input[ @name =\"Name\"]")).SendKeys("user");
-            driver.FindElement(By.XPath("//input[ @name =\"Password\"]")).SendKeys("user");
-            driver.FindElement(By.CssSelector(".btn")).Click();
-            driver.FindElement(By.XPath("//ul//a[@href=\"/Product\"]")).Click();
-            driver.FindElement(By.XPath("//td[a=\"Chai\"]/descendant::*")).Click();
-            Assert.AreEqual("1", driver.FindElement(By.CssSelector("#ProductId")).GetAttribute("value"));
-            Assert.AreEqual("Chai", driver.FindElement(By.CssSelector("#ProductName")).GetAttribute("value"));
-            Assert.AreEqual("Beverages", driver.FindElement(By.XPath("//select[@id=\"CategoryId\"]/descendant::option[@selected]")).Text);
-            Assert.AreEqual("Exotic Liquids", driver.FindElement(By.XPath("//select[@id=\"SupplierId\"]/descendant::option[@selected]")).Text);
-            Assert.AreEqual("18,0000", driver.FindElement(By.CssSelector("#UnitPrice")).GetAttribute("value"));
-            Assert.AreEqual("10 boxes x 20 bags", driver.FindElement(By.CssSelector("#QuantityPerUnit")).GetAttribute("value"));
-            Assert.AreEqual("39", driver.FindElement(By.CssSelector("#UnitsInStock")).GetAttribute("value"));
-            Assert.AreEqual("0", driver.FindElement(By.CssSelector("#UnitsOnOrder")).GetAttribute("value"));
-            Assert.AreEqual("10", driver.FindElement(By.CssSelector("#ReorderLevel")).GetAttribute("value"));
+            loginPage = new LoginPage(driver);
+            mainPage = new MainPage(driver);
+            allProducts = new AllProducts(driver);
+            productInfoPage = new ProductInfoPage(driver);
+            loginPage.Login("user", "user");
+            mainPage.OpenProducts();
+            allProducts.OpenProduct_Chai();
+            Assert.AreEqual("1", productInfoPage.GetProductId());
+            Assert.AreEqual("Chai", productInfoPage.GetProductName());
+            Assert.AreEqual("Beverages", productInfoPage.GetCategory());
+            Assert.AreEqual("Exotic Liquids", productInfoPage.GetSupplier());
+            Assert.AreEqual("18,0000", productInfoPage.GetUnitPrice());
+            Assert.AreEqual("10 boxes x 20 bags", productInfoPage.GetQuantityPerUnit());
+            Assert.AreEqual("39", productInfoPage.GetUnitsInStock());
+            Assert.AreEqual("0", productInfoPage.GetUnitsOnOrder());
+            Assert.AreEqual("10", productInfoPage.GetReorderLevel());
         }
 
         [Test]
         public void Delete_test()
         {
-            driver.FindElement(By.XPath("//input[ @name =\"Name\"]")).SendKeys("user");
-            driver.FindElement(By.XPath("//input[ @name =\"Password\"]")).SendKeys("user");
-            driver.FindElement(By.CssSelector(".btn")).Click();
-            driver.FindElement(By.XPath("//ul//a[@href=\"/Product\"]")).Click();
-            driver.FindElement(By.CssSelector(".btn")).Click();
-            driver.FindElement(By.CssSelector("#ProductName")).SendKeys("Truffells");
-            SelectElement select1 = new SelectElement(driver.FindElement(By.CssSelector("#CategoryId")));
-            select1.SelectByText("Condiments");
-            SelectElement select2 = new SelectElement(driver.FindElement(By.CssSelector("#SupplierId")));
-            select2.SelectByText("Norske Meierier");
-            driver.FindElement(By.CssSelector("#UnitPrice")).SendKeys("90");
-            driver.FindElement(By.CssSelector("#QuantityPerUnit")).SendKeys("3");
-            driver.FindElement(By.CssSelector("#UnitsInStock")).SendKeys("120");
-            driver.FindElement(By.CssSelector("#UnitsOnOrder")).SendKeys("40");
-            driver.FindElement(By.CssSelector("#ReorderLevel")).SendKeys("5");
-            driver.FindElement(By.CssSelector(".btn")).Click();
-            driver.FindElement(By.XPath("//td[a=\"Truffells\"]/following-sibling::*[10]/a")).Click();
-            driver.SwitchTo().Alert().Accept();
-            Thread.Sleep(500);
-            Assert.AreEqual(false,isElementPresent(By.XPath("//td[a=\"Truffells\"]")));
+            loginPage = new LoginPage(driver);
+            mainPage = new MainPage(driver);
+            allProducts = new AllProducts(driver);
+            productEditingPage = new ProductEditingPage(driver);
+            loginPage.Login("user", "user");
+            mainPage.OpenProducts();
+            allProducts.OpenProductCreator();
+            productEditingPage.SetProductName("Truffles");
+            productEditingPage.SetCategory("Condiments");
+            productEditingPage.SetSupplier("Norske Meierier");
+            productEditingPage.SetUnitPrice("90");
+            productEditingPage.SetQuantityPerUnit("3");
+            productEditingPage.SetUnitsInStock("120");
+            productEditingPage.SetUnitsOnOrder("40");
+            productEditingPage.SetReorderLevel("5");
+            productEditingPage.CreateConfirmation();
+            allProducts.Product_Truffles_Del();
+            Assert.AreEqual(false,allProducts.isProductPresent("Truffles"));
         }
 
         [Test]
         public void Logout_test()
         {
-            driver.FindElement(By.XPath("//input[ @name =\"Name\"]")).SendKeys("user");
-            driver.FindElement(By.XPath("//input[ @name =\"Password\"]")).SendKeys("user");
-            driver.FindElement(By.CssSelector(".btn")).Click();
-            driver.FindElement(By.XPath("//*[contains(a,\"Logout\")]")).Click();
-            Assert.AreEqual(isElementPresent(By.CssSelector("label[for= \"Name\"]")), true);
-            Assert.AreEqual(isElementPresent(By.CssSelector("label[for= \"Password\"]")), true);
+            loginPage = new LoginPage(driver);
+            mainPage = new MainPage(driver);
+            loginPage.Login("user", "user");
+            mainPage.Logout();
+            Assert.AreEqual(loginPage.isElementPresent("Name"), true);
+            Assert.AreEqual(loginPage.isElementPresent("Password"), true);
 
         }
 
@@ -113,17 +121,7 @@ namespace SeleniumWD
             driver.Close();
             driver.Quit();
         }
-        public static Boolean isElementPresent(By locator)
-        {
-            try
-            {
-                return driver.FindElement(locator).Displayed;
-            }
-            catch (NoSuchElementException)
-            {
-                return false;
-            }
-        }
+
     }
     
 }
