@@ -33,7 +33,6 @@ namespace SeleniumWD
         public LoginPage Logout()
         {
             new Actions(driver).Click(LogoutBtn).Build().Perform();
-        //  LogoutBtn.Click();
             return new LoginPage(driver);
         }
     }

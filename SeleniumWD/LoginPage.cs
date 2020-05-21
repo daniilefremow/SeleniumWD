@@ -23,10 +23,7 @@ namespace SeleniumWD
         public MainPage Login(string name, string password)
         {
             new Actions(driver).Click(LoginName).SendKeys(name).SendKeys(Keys.Tab).Build().Perform();
-         // LoginName.SendKeys(name);
             new Actions(driver).SendKeys(password).SendKeys(Keys.Enter).Build().Perform();
-         // LoginPassword.SendKeys(password);
-         // LoginBtn.Click();
             return new MainPage(driver);
 
         }

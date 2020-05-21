@@ -32,8 +32,7 @@ namespace SeleniumWD
         public void Login_test()
         {
             loginPage = new LoginPage(driver);
-            mainPage = new MainPage(driver);
-            loginPage.Login("user","user");
+            mainPage = loginPage.Login("user","user");
             Assert.AreEqual("Home page",mainPage.GetHomePageTitle());
         }
 
@@ -41,12 +40,9 @@ namespace SeleniumWD
         public void AddProduct_Test()
         {
             loginPage = new LoginPage(driver);
-            mainPage = new MainPage(driver);
-            allProducts = new AllProducts(driver);
-            productEditingPage = new ProductEditingPage(driver);
-            loginPage.Login("user", "user");
-            mainPage.OpenProducts();
-            allProducts.OpenProductCreator();
+            mainPage = loginPage.Login("user", "user");
+            allProducts = mainPage.OpenProducts();
+            productEditingPage = allProducts.OpenProductCreator();
             productEditingPage.SetProductName("Sweets");
             productEditingPage.SetCategory ("Condiments");
             productEditingPage.SetSupplier("Norske Meierier");
@@ -63,12 +59,9 @@ namespace SeleniumWD
         public void Check_Test()
         {
             loginPage = new LoginPage(driver);
-            mainPage = new MainPage(driver);
-            allProducts = new AllProducts(driver);
-            productInfoPage = new ProductInfoPage(driver);
-            loginPage.Login("user", "user");
-            mainPage.OpenProducts();
-            allProducts.OpenProduct_Chai();
+            mainPage = loginPage.Login("user", "user");
+            allProducts = mainPage.OpenProducts();
+            productInfoPage = allProducts.OpenProduct_Chai();
             Assert.AreEqual("1", productInfoPage.GetProductId());
             Assert.AreEqual("Chai", productInfoPage.GetProductName());
             Assert.AreEqual("Beverages", productInfoPage.GetCategory());
@@ -84,12 +77,9 @@ namespace SeleniumWD
         public void Delete_test()
         {
             loginPage = new LoginPage(driver);
-            mainPage = new MainPage(driver);
-            allProducts = new AllProducts(driver);
-            productEditingPage = new ProductEditingPage(driver);
-            loginPage.Login("user", "user");
-            mainPage.OpenProducts();
-            allProducts.OpenProductCreator();
+            mainPage = loginPage.Login("user", "user");
+            allProducts = mainPage.OpenProducts();
+            productEditingPage = allProducts.OpenProductCreator();
             productEditingPage.SetProductName("Truffles");
             productEditingPage.SetCategory("Condiments");
             productEditingPage.SetSupplier("Norske Meierier");
@@ -107,8 +97,7 @@ namespace SeleniumWD
         public void Logout_test()
         {
             loginPage = new LoginPage(driver);
-            mainPage = new MainPage(driver);
-            loginPage.Login("user", "user");
+            mainPage = loginPage.Login("user", "user");
             mainPage.Logout();
             Assert.AreEqual(loginPage.isElementPresent("Name"), true);
             Assert.AreEqual(loginPage.isElementPresent("Password"), true);

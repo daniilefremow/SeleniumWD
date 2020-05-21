@@ -15,7 +15,6 @@ namespace SeleniumWD
             this.driver = driver;
         }
 
-        private IWebElement ProductId => driver.FindElement(By.CssSelector("#ProductId"));
         private IWebElement ProductName => driver.FindElement(By.CssSelector("#ProductName"));
         private IWebElement Category => driver.FindElement(By.CssSelector("#CategoryId"));
         private IWebElement Supplier => driver.FindElement(By.CssSelector("#SupplierId"));

@@ -25,10 +25,10 @@ namespace SeleniumWD
             CreateProductBtn.Click();
             return new ProductEditingPage(driver);
         }
-        public ProductEditingPage OpenProduct_Chai()
+        public ProductInfoPage OpenProduct_Chai()
         {
             Product_Chai.Click();
-            return new ProductEditingPage(driver);
+            return new ProductInfoPage(driver);
         }
         public string GetAllProductsTitle()
         {
