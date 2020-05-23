@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using SeleniumWD.business_object;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,46 +26,46 @@ namespace SeleniumWD
         private IWebElement ReorderLevel => driver.FindElement(By.CssSelector("#ReorderLevel"));
         private IWebElement ConfirmBtn => driver.FindElement(By.CssSelector(".btn"));
 
-        public void SetProductName(string ProductName)
+        public void SetProductName(Products products)
         {
-            this.ProductName.SendKeys(ProductName);
+            this.ProductName.SendKeys(products.ProductName);
         }
-        public void SetCategory(string Category)
+        public void SetCategory(Products products)
         {
             SelectElement select1 = new SelectElement(this.Category);
             select1.SelectByText("Condiments");
-            this.Category.SendKeys(Category);
+            this.Category.SendKeys(products.Category);
         }
-        public void SetSupplier(string Supplier)
+        public void SetSupplier(Products products)
         {
             SelectElement select1 = new SelectElement(this.Supplier);
             select1.SelectByText("Norske Meierier");
-            this.Supplier.SendKeys(Supplier);
+            this.Supplier.SendKeys(products.Supplier);
         }
-        public void SetUnitPrice(string UnitPrice)
+        public void SetUnitPrice(Products products)
         {
-            this.UnitPrice.SendKeys(UnitPrice);
+            this.UnitPrice.SendKeys(products.UnitPrice);
         }
-        public void SetQuantityPerUnit(string QuantityPerUnit)
+        public void SetQuantityPerUnit(Products products)
         {
-            this.QuantityPerUnit.SendKeys(QuantityPerUnit);
+            this.QuantityPerUnit.SendKeys(products.QuantityPerUnit);
         }
-        public void SetUnitsInStock(string UnitsInStock)
+        public void SetUnitsInStock(Products products)
         {
-            this.UnitsInStock.SendKeys(UnitsInStock);
+            this.UnitsInStock.SendKeys(products.UnitsInStock);
         }
-        public void SetUnitsOnOrder(string UnitsOnOrder)
+        public void SetUnitsOnOrder(Products products)
         {
-            this.UnitsOnOrder.SendKeys(UnitsOnOrder);
+            this.UnitsOnOrder.SendKeys(products.UnitsOnOrder);
         }
-        public void SetReorderLevel(string ReorderLevel)
+        public void SetReorderLevel(Products products)
         {
-            this.ReorderLevel.SendKeys(ReorderLevel);
+            this.ReorderLevel.SendKeys(products.ReorderLevel);
         }
-        public AllProducts CreateConfirmation()
+        public AllProductsPage CreateConfirmation()
         {
             ConfirmBtn.Click();
-            return new AllProducts(driver);
+            return new AllProductsPage(driver);
         }
         
 

@@ -25,10 +25,10 @@ namespace SeleniumWD
         {
             return HomePageTitle.Text;
         }
-        public AllProducts OpenProducts()
+        public AllProductsPage OpenProducts()
         {
            AllProductsBtn.Click();
-           return new AllProducts(driver);
+           return new AllProductsPage(driver);
         }
         public LoginPage Logout()
         {

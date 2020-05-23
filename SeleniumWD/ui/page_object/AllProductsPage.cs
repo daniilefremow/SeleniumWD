@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using SeleniumWD.business_object;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,11 +7,11 @@ using System.Threading;
 
 namespace SeleniumWD
 {
-    class AllProducts
+    class AllProductsPage
     {
         private IWebDriver driver;
 
-        public AllProducts(IWebDriver driver)
+        public AllProductsPage(IWebDriver driver)
         {
             this.driver = driver;
         }
@@ -40,12 +41,12 @@ namespace SeleniumWD
             driver.SwitchTo().Alert().Accept();
         }
 
-        public Boolean isProductPresent(string ProductName)
+        public Boolean isProductPresent(Products products)
         {
             Thread.Sleep(1000);
             try
             {
-                return driver.FindElement(By.XPath($"//td[a=\"{ProductName}\"]/descendant::*")).Displayed;
+                return driver.FindElement(By.XPath($"//td[a=\"{products.ProductName}\"]/descendant::*")).Displayed;
             }
             catch (NoSuchElementException)
             {
