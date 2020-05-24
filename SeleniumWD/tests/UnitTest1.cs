@@ -58,7 +58,7 @@ namespace SeleniumWD
         {
             mainPage = Autorisation.Login(user1, driver);
             allProductsPage = ProductsService.CreateProduct(truffles, driver);
-            allProductsPage.Product_Truffles_Del();
+            allProductsPage.Product_Del(truffles);
             Assert.AreEqual(false,allProductsPage.isProductPresent(truffles));
         }
 

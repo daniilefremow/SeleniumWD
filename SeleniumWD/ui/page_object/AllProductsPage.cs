@@ -18,26 +18,24 @@ namespace SeleniumWD
 
         private IWebElement ALLProductsTitle => driver.FindElement(By.XPath("//h2"));
         private IWebElement CreateProductBtn => driver.FindElement(By.CssSelector(".btn"));
-        private IWebElement Product_Chai => driver.FindElement(By.XPath("//td[a=\"Chai\"]/descendant::*"));
-        private IWebElement Product_Truffles_DelBtn => driver.FindElement(By.XPath("//td[a=\"Truffles\"]/following-sibling::*[10]/a"));
 
         public ProductEditingPage OpenProductCreator()
         {
             CreateProductBtn.Click();
             return new ProductEditingPage(driver);
         }
-        public ProductInfoPage OpenProduct_Chai()
+        public ProductInfoPage OpenProduct(Products products)
         {
-            Product_Chai.Click();
+            driver.FindElement(By.XPath($"//td[a=\"{products.ProductName}\"]/descendant::*")).Click();
             return new ProductInfoPage(driver);
         }
         public string GetAllProductsTitle()
         {
             return ALLProductsTitle.Text;
         }
-        public void Product_Truffles_Del()
+        public void Product_Del(Products products)
         {
-            Product_Truffles_DelBtn.Click();
+            driver.FindElement(By.XPath($"//td[a=\"{products.ProductName}\"]/following-sibling::*[10]/a")).Click();
             driver.SwitchTo().Alert().Accept();
         }
 

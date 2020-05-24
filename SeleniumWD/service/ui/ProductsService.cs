@@ -28,7 +28,7 @@ namespace SeleniumWD.service.ui
         {
             MainPage mainPage = new MainPage(driver);
             AllProductsPage allProductsPage = mainPage.OpenProducts();
-            return allProductsPage.OpenProduct_Chai();
+            return allProductsPage.OpenProduct(products);
         }
     }
 }
