@@ -11,7 +11,8 @@ namespace SeleniumWD.service.ui
         public static MainPage Login(UsersInfo usersInfo, IWebDriver driver)
         {
             LoginPage loginPage = new LoginPage(driver);
-            return loginPage.Login(usersInfo);
+            loginPage.Login(usersInfo);
+            return loginPage.LoginBtnClick();
         }
     }
 }

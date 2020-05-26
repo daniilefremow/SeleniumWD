@@ -21,12 +21,15 @@ namespace SeleniumWD
         private IWebElement LoginPassword => driver.FindElement(By.XPath("//input[ @name =\"Password\"]"));
         private IWebElement LoginBtn => driver.FindElement(By.CssSelector(".btn"));
 
-        public MainPage Login(UsersInfo usersInfo)
+        public void Login(UsersInfo usersInfo)
         {
             new Actions(driver).Click(LoginName).SendKeys(usersInfo.Name).SendKeys(Keys.Tab).Build().Perform();
-            new Actions(driver).SendKeys(usersInfo.Password).SendKeys(Keys.Enter).Build().Perform();
+            new Actions(driver).SendKeys(usersInfo.Password).Build().Perform();
+        }
+        public MainPage LoginBtnClick()
+        {
+            new Actions(driver).SendKeys(Keys.Enter).Build().Perform();
             return new MainPage(driver);
-
         }
         public Boolean isElementPresent(string ElementName)
         {
